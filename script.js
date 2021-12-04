@@ -4,9 +4,11 @@
 //addeventlistener for click on all operation calculation buttons to send temporary number to main array and include function as it's own array item
 let display = "";//store display as key entry string replaceChild() to the div.display on click
 let memory = "";
+let autosave = "";
 
 const displayRef = document.querySelector('.display');
 const memoryRef = document.querySelector('.memorydisplay');
+const autosaveRef = document.querySelector('.autosave');
 const button = document.querySelectorAll('button');
 const numericalButtons = document.querySelectorAll('.numericalButtons');
 const calculationButtons = document.querySelectorAll('.calculationButtons');
@@ -17,6 +19,7 @@ const memoryButtonCall = document.getElementById('memorybutton');
 const memoryButtonAdd = document.getElementById('memorybutton+')
 const deleteButton = document.getElementById('deletebutton');
 const clearButton = document.getElementById('clearbutton');
+const autosaveButton = document.getElementById('autosavebutton')
 
 
 initializeButtons()
@@ -35,6 +38,7 @@ function initializeButtons(){
     clearButton.addEventListener('click', clear);
     memoryButtonCall.addEventListener('click',memoryCall);
     memoryButtonAdd.addEventListener('click',memoryAdd);
+    autosaveButton.addEventListener('click',autosaveCall);
 }
     
 function calculate(){
@@ -63,8 +67,10 @@ function calculate(){
         console.log('operation ' + i + ' success' );
     }
     display = calculatedValue;
+    correctFloatIssues(); //to correct the issues with float numbers calculating incorrectly due to nature of numbers in float
+    autosave = display;
     updateDisplay();
-
+    updateAutosave();
 }; 
 
 function appendDisplay() {
@@ -89,7 +95,13 @@ function appendDisplay() {
 
 function updateDisplay() {displayRef.textContent = display}; //function to call to update display 
 function updateMemoryDisplay() {memoryRef.textContent = memory}; 
+function updateAutosave() {autosaveRef.textContent = autosave}; 
+function autosaveCall() {display = autosave; updateDisplay()};
 
+function correctFloatIssues(){
+   display = Math.round((display*10000).toFixed(4))/10000;
+   console.log(display);
+}
 function add(currentvaluestore, nextnumber){
     console.log(parseFloat(currentvaluestore)+parseFloat(nextnumber));
     return parseFloat(currentvaluestore)+parseFloat(nextnumber);
@@ -107,11 +119,12 @@ function divide(currentvaluestore, nextnumber){
     return parseFloat(currentvaluestore)/parseFloat(nextnumber);
 };
 function memoryAdd(){
-    memory = "memory: " + display; //have memoryarray = calculationarray 
+    memory = display; //have memoryarray = calculationarray 
     updateMemoryDisplay();
 };
 function memoryCall(){
     display = memory;
+    updateDisplay();
     updateMemoryDisplay();
 }
 function clear(){
@@ -119,6 +132,7 @@ function clear(){
     updateDisplay();
     //if calculation array is [], set memoryarray to []
 };
+
 function del(){
     if(display.charAt(display.length-1)==" "){
         console.log("del space success");
@@ -129,3 +143,5 @@ function del(){
     //pop last number off temporary storage
     //if temporary storage "", pop last item off calculation array and put that item in temp memory
 };
+
+
