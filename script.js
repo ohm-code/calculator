@@ -5,6 +5,7 @@
 let display = "";//store display as key entry string replaceChild() to the div.display on click
 let memory = "";
 let autosave = "";
+let justCalculated = false; //to keep track of if the equals sign was the last key pressed
 
 const displayRef = document.querySelector('.display');
 const memoryRef = document.querySelector('.memorydisplay');
@@ -13,6 +14,7 @@ const button = document.querySelectorAll('button');
 const numericalButtons = document.querySelectorAll('.numericalButtons');
 const calculationButtons = document.querySelectorAll('.calculationButtons');
 const operators = ['*','/','+','-'];
+const numbers = ['1','2','3','4','5','6','7','8','9','0'];
 const nonDisplayButtons = ['=','M','M+','Cl','Del'];
 const equalsButton = document.getElementById('calculate');
 const memoryButtonCall = document.getElementById('memorybutton');
@@ -44,41 +46,53 @@ function initializeButtons(){
     
 function calculate(){
     let calculationArray = display.split(' ');
-    let calculatedValue = parseFloat(calculationArray[0]);
-    for (let i = 1; i<calculationArray.length-1; i+=2){
-        switch(calculationArray[i]){
+    let calcArrayHolder = []; // temporary hold for calculating higher operations first 
+    for (let i = 1; i<calculationArray.length-1; i+=2){ 
+        switch(calculationArray[i]){  // iterate through array calculting higher order operations mult and div first and storing everything in calcArrayHolder
+            case '*':
+                calcArrayHolder.push(multiply(calculationArray[i-1],calculationArray[i+1]));
+                console.log(calcArrayHolder);
+                break;
+            case '/':
+                calcArrayHolder.push(divide(calculationArray[i-1],calculationArray[i+1]));
+                console.log(calcArrayHolder);
+                break;         
             case '+':
-                calculatedValue = add(calculatedValue,calculationArray[i+1]);
+                calcArrayHolder.push(calculationArray[i-1],calculationArray[i]);
+                console.log(calcArrayHolder);
+                break;
+            case '-':
+                calcArrayHolder.push(calculationArray[i-1],calculationArray[i]);
+                console.log(calcArrayHolder);
+                break;                      
+        }}
+    let calculatedValue = parseFloat(calcArrayHolder[0]); //set initial value for calculateValue as first number
+    for (let i = 1; i<calcArrayHolder.length-1; i+=2){ //iterate through lower order operations add and subtract
+        switch(calcArrayHolder[i]){
+            case '+':
+                calculatedValue = add(calculatedValue,calcArrayHolder[i+1]);
                 console.log(calculatedValue);
                 break;
             case '-':
-                calculatedValue = subtract(calculatedValue,calculationArray[i+1]);
+                calculatedValue = subtract(calculatedValue,calcArrayHolder[i+1]);
                 console.log(calculatedValue);
                 break;   
-            case '*':
-                calculatedValue = multiply(calculatedValue,calculationArray[i+1]);
-                console.log(calculatedValue);
-                break;
-            case '/':
-                calculatedValue = divide(calculatedValue,calculationArray[i+1]);
-                console.log(calculatedValue);
-                break;                
-               
-        }
-        console.log('operation ' + i + ' success' );
-    }
-    display = calculatedValue;
+    }}
+    display = calculatedValue; //set the display to the final calculatedValue
     correctFloatIssues(); //to correct the issues with float numbers calculating incorrectly due to nature of numbers in float
-    autosave = display;
+    autosave = display; //store display value in autosave
     updateDisplay();
     updateAutosave();
+    justCalculated = true; //toggle justCalculated value
 }; 
 
 function appendDisplay() {
-    if (nonDisplayButtons.includes(this.textContent)){
-        console.log('nonDisplay success ') //nothing needs to be done with display for nondisplaybuttons
-        return
-    }
+    if (justCalculated == true){
+        justCalculated = false;
+        if (numbers.includes(this.textContent)){
+            console.log("caught!!@")
+            display = "";
+    }};
     if (operators.includes(this.textContent)){  //include space before and after operator added to string. Later used to split to array by " "
         if ((this.textContent == '-')&&(display == "")){
             console.log("- success!")
@@ -89,7 +103,7 @@ function appendDisplay() {
         else {display += ' ' + this.textContent + ' '};
     } else{
         display += this.textContent; //numbers just get added to display string
-        console.log(display);
+
     }
     updateDisplay();
     }
