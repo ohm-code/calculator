@@ -20,6 +20,22 @@ body{
     margin-left: 5px;
     margin-right: 5px;
 }
+
+#tooltiptext{
+    display:inline-block;
+    position:absolute;
+    left: 45%; 
+    visibility:hidden;
+    background-color:white;
+    border-style: dotted;
+    width: 200px;
+    font-size: small;
+}
+#helpbutton:hover #tooltiptext{
+    visibility: visible;
+    opacity:100%;
+}
+
 p{
 text-align:right;
 margin: 2px;
@@ -61,6 +77,11 @@ button{
 .calculatorname{
     text-align: center;
     margin: 8px;
+    display:flex;
+
+}
+.calculatorname strong{
+    flex:1;
 }
 .calculationButtons{
     color: rgb(157, 98, 199);
@@ -88,7 +109,16 @@ button{
     font-size: 40px;
     border-bottom:  2px groove grey
 }
+.container #helpbutton{
+    border-style: none;
+    background-color: transparent;
+    color:black;
+    padding: 1px;
+    margin: 0px;
+    width: 15px;
+    height: 15px; 
+}
 #calculate{
-    background-color: rgb(43, 16, 49);
+    background-color: rgb(110, 61, 121);
     color: white;
 }

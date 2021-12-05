@@ -19,7 +19,8 @@ const memoryButtonCall = document.getElementById('memorybutton');
 const memoryButtonAdd = document.getElementById('memorybutton+')
 const deleteButton = document.getElementById('deletebutton');
 const clearButton = document.getElementById('clearbutton');
-const autosaveButton = document.getElementById('autosavebutton')
+const autosaveButton = document.getElementById('autosavebutton');
+const helpButton = document.getElementById ('helpbutton');
 
 
 initializeButtons()
