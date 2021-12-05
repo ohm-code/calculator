@@ -23,6 +23,7 @@ body{
 p{
 text-align:right;
 margin: 2px;
+font-size: small;
 }
 
 .container{
@@ -57,9 +58,9 @@ button{
     font-size: large; 
     background-color: rgb(202, 202, 202);
 }
-.calculatorname p{
+.calculatorname{
     text-align: center;
-    margin: 12px;
+    margin: 8px;
 }
 .calculationButtons{
     color: rgb(157, 98, 199);
